@@ -2,6 +2,11 @@
 
 Python script to interact with the ThreatBlockr API from the terminal.
 
+# Updates
+
+The dev branch has some feature updates! The search options have changed to allow you to iterate through all configured block lists for an IP address, and if it's not blocked it will prompt you to block it.
+Also, you can run reports (only a single report currently but more are coming), as well as query what lists are configured in your edge instance. This requires that you know your Edge Instance UUID.
+
 # Setup
 
 ```
@@ -22,6 +27,7 @@ Each allow list and block list have a UUID. The easiest approach is to just use 
 # Usage
 
 General help menu:
+
 ```
 python3 threatblockr-api.py -h
 usage: threatblockr-api.py [-h] {query,allow,block} ...
@@ -39,6 +45,7 @@ options:
 ```
 
 Query help menu:
+
 ```
 python3 threatblockr-api.py query -h
 usage: threatblockr-api.py query [-h] [-d DOMAIN] [-i IP_ADDR] [-n | -t]
@@ -54,6 +61,7 @@ options:
 ```
 
 Allow help menu:
+
 ```
 python3 threatblockr-api.py allow -h
 usage: threatblockr-api.py allow [-h] [-i IP_ADDR] [-m MASKBITS] [-D DESCRIPTION]
@@ -69,6 +77,7 @@ options:
 ```
 
 Block help menu:
+
 ```
 python3 threatblockr-api.py block -h
 usage: threatblockr-api.py block [-h] [-i IP_ADDR] [-m MASKBITS] [-D DESCRIPTION]
@@ -86,6 +95,7 @@ options:
 ## Querying domains and IP addresses
 
 Query for domain presence in ThreatBlockr:
+
 ```
 python3 threatblockr-api.py query -t -d google.com
 ==[ Searching ThreatBlockr IOC list for google.com ]==
@@ -98,6 +108,7 @@ python3 threatblockr-api.py query -t -d google.com
 ```
 
 Query for IP address presence in ThreatBlockr:
+
 ```
 python3 threatblockr-api.py query -i 8.8.8.8
 ==[ Searching ThreatBlockr IOC list for 8.8.8.8 ]==
@@ -124,38 +135,39 @@ python3 threatblockr-api.py query -i 8.8.8.8
 ```
 
 Query DNS records for a domain:
+
 ```
-python3 threatblockr-api.py query -n -d miro.com     
+python3 threatblockr-api.py query -n -d miro.com
 54.246.153.150
 63.33.95.151
-34.252.232.28                     
-52.16.59.141                        
-34.252.96.110          
-34.248.151.221                    
-99.80.212.165                                               
-63.33.54.20                    
+34.252.232.28
+52.16.59.141
+34.252.96.110
+34.248.151.221
+99.80.212.165
+63.33.54.20
 Do you want to update the ThreatBlockr lists? [y/n]: y
 Allow list or block list? [allow/block]: allow
 [
     {
         "id": "54.246.153.150/32",
         "address": "54.246.153.150",
-        "maskbits": 32,            
+        "maskbits": 32,
         "description": "miro.com",
         "insertedDatetime": "2022-11-16T20:03:55.000+00:00",
-        "expiresDatetime": null                             
-    }                          
-]    
-                                                                   
+        "expiresDatetime": null
+    }
+]
+
 [
     {
         "id": "63.33.95.151/32",
         "address": "63.33.95.151",
-        "maskbits": 32,          
+        "maskbits": 32,
         "description": "miro.com",
         "insertedDatetime": "2022-11-16T20:03:55.000+00:00",
-        "expiresDatetime": null                             
-    }                          
+        "expiresDatetime": null
+    }
 ]
 ...
 ```
@@ -169,8 +181,9 @@ Also, by setting `expiresDatetime` to `null` will set the entry to never expire.
 The functionality of these two commands is the same, the only difference is the command itself - either `allow` or `block`.
 
 Add an IP address to the Allow IP List:
+
 ```
-python3 threatblockr-api.py allow -i 8.8.8.8 -m 32 -D "google DNS IP"        
+python3 threatblockr-api.py allow -i 8.8.8.8 -m 32 -D "google DNS IP"
 [
     {
         "id": "8.8.8.8/32",
