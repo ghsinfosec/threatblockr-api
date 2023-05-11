@@ -56,7 +56,7 @@ payload_data = [
 
 # function to get commandline arguments and parse them based on the desired functionality
 def get_args():
-    parser = argparse.ArgumentParser(prog='threatblockr.py', description='Query or update the ThreatBlockr Appliance through the terminal')
+    parser = argparse.ArgumentParser(prog='threatblockr-api.py', description='Query or update the ThreatBlockr Appliance through the terminal')
     subparser = parser.add_subparsers(dest='command')
 
     # query parser to query a domain or IP address
