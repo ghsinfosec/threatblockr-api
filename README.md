@@ -4,8 +4,29 @@ Python script to interact with the ThreatBlockr API from the terminal.
 
 # Updates
 
-The dev branch has some feature updates! The search options have changed to allow you to iterate through all configured block lists for an IP address, and if it's not blocked it will prompt you to block it.
-Also, you can run reports (only a single report currently but more are coming), as well as query what lists are configured in your edge instance. This requires that you know your Edge Instance UUID.
+The dev branch has some feature updates!
+
+- The search options have changed to allow you to iterate through all configured block lists for an IP address, and if it's not blocked it will prompt you to block it.
+- Also, you can run reports for Reasons, Categories, Countries and ASNs. These reports will give you the total allowed and blocked for the last week.
+- The subcommands were split off into their own "modules" and imported into the main file (`threatblocker-api.py`) to clean it up a bit.
+
+## Command Updates
+
+### Query
+
+The `query` command now allows you to query what lists you have configured in your edge instance. This includes both block and allow lists. Everything is return in json format.
+
+Additionally you can now pass in a file containing IP addresses or domain names with `--file`. Using this flag with an IP file will allow you to iterated through all block lists and search for an IP. If it's not found in any block list it will prompt you to block it.
+
+### Update
+
+The `update` command has replaced the `allow` and `block` commands. Those commands were repetitive and I decided to replace them with `update` to keep things in order.
+
+This command will allow you to update allow and blocks lists by adding or removing IP addresses from the lists.
+
+### Report
+
+The `report` command will allow you to run reports on Reasons, Categories, Countries or ASNs. These reports are configured for the last week and will show allowed and blocked hit counts.
 
 # Setup
 
@@ -30,25 +51,25 @@ General help menu:
 
 ```
 python3 threatblockr-api.py -h
-usage: threatblockr-api.py [-h] {query,allow,block} ...
+usage: threatblockr-api.py [-h] {query,update,report} ...
 
 Query or update the ThreatBlockr Appliance through the terminal
 
 positional arguments:
-  {query,allow,block}
-    query              Query for domain or IP presence
-    allow              Update the allow list
-    block              Update the block list
+  {query,update,report}
+    query               Query for domain or IP presence
+    update              Update the specified list
+    report              Get report data for the specified report and period
 
 options:
-  -h, --help           show this help message and exit
+  -h, --help            show this help message and exit
 ```
 
 Query help menu:
 
 ```
 python3 threatblockr-api.py query -h
-usage: threatblockr-api.py query [-h] [-d DOMAIN] [-i IP_ADDR] [-n | -t]
+usage: threatblockr-api.py query [-h] [-d DOMAIN] [-i IP_ADDR] [--show-lists] [--file IP_FILE] [-n | -t]
 
 options:
   -h, --help            show this help message and exit
@@ -56,15 +77,17 @@ options:
                         Domain you want to query
   -i IP_ADDR, --ip-address IP_ADDR
                         IP address you want to query
+  --show-lists          Show the current lists that are present in ThreatBlockr
+  --file IP_FILE        Pass in a file with IP addresses to query
   -n, --nameservers     Query nameservers/DNS records for domain
   -t, --threatblockr    Query ThreatBlockr for domain
 ```
 
-Allow help menu:
+Update help menu:
 
 ```
 python3 threatblockr-api.py allow -h
-usage: threatblockr-api.py allow [-h] [-i IP_ADDR] [-m MASKBITS] [-D DESCRIPTION]
+usage: threatblockr-api.py update [-h] [-i IP_ADDR] [-m MASKBITS] [-D DESCRIPTION] [-a | -b | -rb | -ra]
 
 options:
   -h, --help            show this help message and exit
@@ -74,22 +97,22 @@ options:
                         CIDR notation maskbits - e.g. 24, 32, etc
   -D DESCRIPTION, --description DESCRIPTION
                         Description for the new entry - e.g. "www.example.com"
+  -a, --allow           Update the allow list
+  -b, --block           Update the block list
+  -rb, --remove-block   Remove IP from block list
+  -ra, --remove-allow   Remove IP from allow list
 ```
 
-Block help menu:
+Report help menu:
 
 ```
-python3 threatblockr-api.py block -h
-usage: threatblockr-api.py block [-h] [-i IP_ADDR] [-m MASKBITS] [-D DESCRIPTION]
+python3 threatblockr-api.py report -h
+usage: threatblockr-api.py report [-h] [-r {reasons,categories,countries,asns}]
 
 options:
   -h, --help            show this help message and exit
-  -i IP_ADDR, --ip-address IP_ADDR
-                        IP Address to add to ThreatBlockr list
-  -m MASKBITS, --maskbits MASKBITS
-                        CIDR notation maskbits - e.g. 24, 32, etc
-  -D DESCRIPTION, --description DESCRIPTION
-                        Description for the new entry - e.g. "www.example.com"
+  -r {reasons,categories,countries,asns}, --report {reasons,categories,countries,asns}
+                        Report type - e.g. reasons, categories, countries, asns
 ```
 
 ## Querying domains and IP addresses
@@ -183,7 +206,7 @@ The functionality of these two commands is the same, the only difference is the 
 Add an IP address to the Allow IP List:
 
 ```
-python3 threatblockr-api.py allow -i 8.8.8.8 -m 32 -D "google DNS IP"
+python3 threatblockr-api.py update -i 8.8.8.8 -m 32 -D "google DNS IP" --allow
 [
     {
         "id": "8.8.8.8/32",
