@@ -130,31 +130,47 @@ python3 threatblockr-api.py query -t -d google.com
 }
 ```
 
-Query for IP address presence in ThreatBlockr:
+Query for single IP address presence in ThreatBlockr:
 
 ```
-python3 threatblockr-api.py query -i 8.8.8.8
-==[ Searching ThreatBlockr IOC list for 8.8.8.8 ]==
+python3 threatblockr-api.py query -t -i 1.10.184.106
+Found 1.10.184.106 in CINS Army list
+```
 
-{
-    "asn": {
-        "asn": 15169,
-        "name": "Google LLC"
-    },
-    "address": "8.8.8.8",
-    "country": "United States",
-    "blockListHistory": [
-        {
-            "insertDateTime": "2022-06-21 09:24:24",
-            "removeDateTime": null,
-            "source": "Malware Patrol Enterprise"
-        }
-    ],
-    "onBlockList": true,
-    "onThreatList": false,
-    "threatListHistory": [],
-    "threatListScores": {}
-}
+Query for ThreatBlockr for IP's in a file, then prompt to block unlisted IP's:
+
+```
+python3 threatblockr.py query -t --file ~/temp/royal-short
+Found 47.87.229.39 in CISA Alert List
+Found 5.181.234.58 in CISA Alert List
+Found 45.61.136.47 in CISA Alert List
+Found 45.61.136.47 in DomainTools
+
+Not found in any block lists:
+ ['1.2.3.4', '5.4.3.2']
+Do you want to block these IP's? [y/n]: y
+[
+    {
+        "id": "1.2.3.4/32",
+        "address": "1.2.3.4",
+        "maskbits": 32,
+        "description": "received from threat intel",
+        "insertedDatetime": "2023-05-12T15:25:26.000+00:00",
+        "expiresDatetime": null
+    }
+]
+
+[
+    {
+        "id": "5.4.3.2/32",
+        "address": "5.4.3.2",
+        "maskbits": 32,
+        "description": "received from threat intel",
+        "insertedDatetime": "2023-05-12T15:25:26.000+00:00",
+        "expiresDatetime": null
+    }
+]
+
 ```
 
 Query DNS records for a domain:
@@ -217,4 +233,16 @@ python3 threatblockr-api.py update -i 8.8.8.8 -m 32 -D "google DNS IP" --allow
         "expiresDatetime": null
     }
 ]
+```
+
+## Remove IP from list (block or allow)
+
+To remove an IP address from either a block list or allow list:
+
+- `-rb` or `--remove-block` will remove from block lists
+- `-ra` or `--remove-allow` will remove from allow lists
+
+```
+python3 threatblockr.py update -i 1.2.3.4 -m 32 --remove-block
+1.2.3.4 was removed from ThreatBlockr!
 ```

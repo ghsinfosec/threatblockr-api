@@ -100,14 +100,13 @@ def search(ip='', domain=''):
                     blacklist.append({i['name']: ip})
                     print(f'Found {ip} in {i["name"]}')
 
-        return blacklist
-
     elif domain:
         response = requests.get(f'{globals.base_url}{globals.api_endpoints["search_ioc_domain"]}{domain}', headers=globals.headers).text
         print(response)
     else:
         print('Unknown options. Quitting!')
 
+    return blacklist
 
 # function to display the currently configured lists in threatblockr
 def get_lists():
