@@ -40,12 +40,12 @@ def lookup_dns(domain):
         if allow_or_block.lower() == 'allow':
             for items in ip_list:
                 for ip in items:
-                    update.update(ip, 32, domain, globals.api_endpoints['allow_list_ip'])
+                    update.add(ip, 32, domain, globals.api_endpoints['allow_list_ip'])
         # update block list
         elif allow_or_block.lower() == 'block':
             for items in ip_list:
                 for ip in items:
-                    update.update(ip, 32, domain, globals.api_endpoints['block_list_ip'])
+                    update.add(ip, 32, domain, globals.api_endpoints['block_list_ip'])
         # reject unknown options and quit
         else:
             print('Option not allowed. Quitting!')
@@ -79,7 +79,7 @@ def file_search(file=''):
 
     if (block_unlisted.lower() == 'y' or block_unlisted.lower() == 'yes'):
         for ip in allowed:
-            update.update(ip, 32, 'received from threat intel', globals.api_endpoints['block_list_ip'])
+            update.add(ip, 32, 'received from threat intel', globals.api_endpoints['block_list_ip'])
     else:
         print('Done. Quitting!')
 

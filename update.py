@@ -20,7 +20,7 @@ def setup_args(subparser):
 
 
 # function to update the specified IP list 'API Python Script'
-def update(ip, maskbits, description, tblist):
+def add(ip, maskbits, description, tblist):
     globals.payload_data[0]['address'] = ip
     globals.payload_data[0]['maskbits'] = int(maskbits)
     globals.payload_data[0]['description'] = description 
@@ -45,9 +45,9 @@ def remove(ip, maskbits, tblist):
 
 def run(args):
     if args.allow:
-        update(args.ip_addr, args.maskbits, args.description, globals.api_endpoints['allow_list_ip'])
+        add(args.ip_addr, args.maskbits, args.description, globals.api_endpoints['allow_list_ip'])
     elif args.block:
-        update(args.ip_addr, args.maskbits, args.description, globals.api_endpoints['block_list_ip'])
+        add(args.ip_addr, args.maskbits, args.description, globals.api_endpoints['block_list_ip'])
     elif args.remove_block:
         remove(args.ip_addr, args.maskbits, globals.api_endpoints['block_list_ip'])
     elif args.remove_allow:
