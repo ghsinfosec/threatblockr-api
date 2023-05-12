@@ -59,7 +59,7 @@ def file_search(file=''):
     file_list = list()
     blacklist = list()
     allowed = list()
-    block_unlisted = list()
+    block_unlisted = '' 
 
     with open(file, 'r') as f:
         lines = f.readlines()
@@ -74,7 +74,7 @@ def file_search(file=''):
         if ip not in blacklist:
             allowed.append(ip)
 
-    if block_unlisted:
+    if len(allowed) != 0:
         print('\nNot found in any block lists:\n', allowed)
         block_unlisted = input('Do you want to block these IP\'s? [y/n]: ')
 
@@ -83,6 +83,8 @@ def file_search(file=''):
                 update.add(ip, 32, 'received from threat intel', globals.api_endpoints['block_list_ip'])
         else:
             print('Done. Quitting!')
+    else:
+        print('Search finished.')
 
 
 def search(ip='', domain=''):
