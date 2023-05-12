@@ -86,7 +86,7 @@ options:
 Update help menu:
 
 ```
-python3 threatblockr-api.py allow -h
+python3 threatblockr-api.py update -h
 usage: threatblockr-api.py update [-h] [-i IP_ADDR] [-m MASKBITS] [-D DESCRIPTION] [-a | -b | -rb | -ra]
 
 options:

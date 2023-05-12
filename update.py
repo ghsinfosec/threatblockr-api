@@ -30,7 +30,7 @@ def update(ip, maskbits, description, tblist):
     print(response)
 
 
-def unblock(ip, maskbits, tblist):
+def remove(ip, maskbits, tblist):
     if 'Content-Type' in globals.headers:
         globals.headers.pop('Content-Type')
     else:
@@ -49,9 +49,9 @@ def run(args):
     elif args.block:
         update(args.ip_addr, args.maskbits, args.description, globals.api_endpoints['block_list_ip'])
     elif args.remove_block:
-        unblock(args.ip_addr, args.maskbits, globals.api_endpoints['block_list_ip'])
+        remove(args.ip_addr, args.maskbits, globals.api_endpoints['block_list_ip'])
     elif args.remove_allow:
-        unblock(args.ip_addr, args.maskbits, globals.api_endpoints['allow_list_ip'])
+        remove(args.ip_addr, args.maskbits, globals.api_endpoints['allow_list_ip'])
     else:
         pass
 
