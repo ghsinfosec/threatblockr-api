@@ -4,7 +4,7 @@ Python script to interact with the ThreatBlockr API from the terminal.
 
 # Updates
 
-The dev branch has some feature updates!
+There have been some feature updates!
 
 - The search options have changed to allow you to iterate through all configured block lists for an IP address, and if it's not blocked it will prompt you to block it.
 - Also, you can run reports for Reasons, Categories, Countries and ASNs. These reports will give you the total allowed and blocked for the last week.
