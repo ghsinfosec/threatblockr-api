@@ -8,7 +8,7 @@ def init():
     global api_endpoints
 
     # initialize variables
-    base_url = 'https://admin.threater.com/api/v5'
+    base_url = 'https://portal.threater.com/api/v5'
     
     # need these headers to make API call
     headers = {
